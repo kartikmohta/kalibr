@@ -14,6 +14,8 @@ cs_add_library(${PROJECT_NAME}
 #  src/NCameraSystemDesignVariableContainer.cpp
 )
 
+if(CATKIN_ENABLE_TESTING)
+
 # Avoid clash with tr1::tuple: https://code.google.com/p/googletest/source/browse/trunk/README?r=589#257
 add_definitions(-DGTEST_USE_OWN_TR1_TUPLE=0)
 
@@ -23,6 +25,8 @@ catkin_add_gtest(${PROJECT_NAME}_test
 )
 
 target_link_libraries(${PROJECT_NAME}_test ${PROJECT_NAME})
+
+endif()
 
 cs_install()
 

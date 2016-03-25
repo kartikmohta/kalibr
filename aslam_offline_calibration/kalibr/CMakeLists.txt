@@ -20,6 +20,8 @@ target_link_libraries(${PROJECT_NAME}_errorterms_python ${PROJECT_NAME}_errorter
 ##################################
 # tests
 ##################################
+if(CATKIN_ENABLE_TESTING)
+
 add_definitions(-DGTEST_USE_OWN_TR1_TUPLE=0)
 
 catkin_add_gtest(${PROJECT_NAME}_test
@@ -27,6 +29,8 @@ catkin_add_gtest(${PROJECT_NAME}_test
   test/TestErrorTerms.cpp
   )
 target_link_libraries(${PROJECT_NAME}_test ${PROJECT_NAME})
+
+endif()
 
 ##################################
 # EXPORT

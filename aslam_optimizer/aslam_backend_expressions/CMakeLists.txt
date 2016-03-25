@@ -14,26 +14,26 @@ include_directories(${EIGEN_INCLUDE_DIRS})
 find_package(Boost REQUIRED COMPONENTS system)
 
 cs_add_library(${PROJECT_NAME}
-  src/RotationExpression.cpp 
+  src/RotationExpression.cpp
   src/RotationExpressionNode.cpp
   src/RotationQuaternion.cpp
   src/MappedRotationQuaternion.cpp
   src/Vector2RotationQuaternionExpressionAdapter.cpp
 
-  src/MatrixExpression.cpp 
+  src/MatrixExpression.cpp
   src/MatrixExpressionNode.cpp
   src/MatrixTransformation.cpp
 
-  src/TransformationExpression.cpp 
+  src/TransformationExpression.cpp
   src/TransformationExpressionNode.cpp
   src/TransformationBasic.cpp
 
-  src/EuclideanExpression.cpp 
+  src/EuclideanExpression.cpp
   src/EuclideanExpressionNode.cpp
   src/EuclideanPoint.cpp
   src/MappedEuclideanPoint.cpp
 
-  src/HomogeneousExpression.cpp 
+  src/HomogeneousExpression.cpp
   src/HomogeneousExpressionNode.cpp
   src/HomogeneousPoint.cpp
   src/MappedHomogeneousPoint.cpp
@@ -51,6 +51,8 @@ cs_add_library(${PROJECT_NAME}
   )
 
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+
+if(CATKIN_ENABLE_TESTING)
 
 # Avoid clash with tr1::tuple: https://code.google.com/p/googletest/source/browse/trunk/README?r=589#257
 add_definitions(-DGTEST_USE_OWN_TR1_TUPLE=0)
@@ -71,6 +73,8 @@ catkin_add_gtest(${PROJECT_NAME}_test
   )
 
 target_link_libraries(${PROJECT_NAME}_test ${PROJECT_NAME})
+
+endif()
 
 cs_install()
 

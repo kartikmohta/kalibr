@@ -28,17 +28,19 @@ add_library(${PROJECT_NAME}
   src/BoostPropertyTreeSupport.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(${PROJECT_NAME}
                       ${catkin_LIBRARIES} ${Boost_LIBRARIES} pthread)
 
 #############
 ## Testing ##
 #############
+if(CATKIN_ENABLE_TESTING)
+
 # Avoid clash with tr1::tuple: https://code.google.com/p/googletest/source/browse/trunk/README?r=589#257
 add_definitions(-DGTEST_USE_OWN_TR1_TUPLE=0)
 
 ## Add gtest based cpp test target and link libraries
-catkin_add_gtest(${PROJECT_NAME}-test 
+catkin_add_gtest(${PROJECT_NAME}-test
   test/test_main.cpp
   test/BoostPropertyTreeImplementation.cpp
 )
@@ -46,3 +48,4 @@ if(TARGET ${PROJECT_NAME}-test)
   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 endif()
 
+endif()

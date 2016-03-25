@@ -10,7 +10,7 @@ ADD_DEFINITIONS(-DASLAM_USE_ROS )
 find_package(Boost REQUIRED COMPONENTS system serialization filesystem)
 
 #common commands for building c++ executables and libraries
-cs_add_library(${PROJECT_NAME} 
+cs_add_library(${PROJECT_NAME}
   src/CameraGeometryBase.cpp
   src/GlobalShutter.cpp
   src/RollingShutter.cpp
@@ -36,6 +36,8 @@ cs_add_library(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
 
+if(CATKIN_ENABLE_TESTING)
+
 # Avoid clash with tr1::tuple: https://code.google.com/p/googletest/source/browse/trunk/README?r=589#257
 add_definitions(-DGTEST_USE_OWN_TR1_TUPLE=0)
 
@@ -57,6 +59,7 @@ SET(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS} 
 
 target_link_libraries(${PROJECT_NAME}_tests ${PROJECT_NAME} ${Boost_LIBRARIES})
 
+endif()
 
 cs_install()
 cs_export()

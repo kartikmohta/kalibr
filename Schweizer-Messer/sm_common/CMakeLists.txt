@@ -12,7 +12,7 @@ include_directories(include ${Boost_INCLUDE_DIRS})
 catkin_package(
   INCLUDE_DIRS include ${catkin_INCLUDE_DIRS}
   LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS 
+  CATKIN_DEPENDS
   DEPENDS
   CFG_EXTRAS export_flags.cmake
 )
@@ -20,7 +20,7 @@ catkin_package(
 add_library(${PROJECT_NAME}
   src/progress_info.cpp
 )
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(${PROJECT_NAME}
                       ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 
@@ -45,6 +45,8 @@ install(DIRECTORY include/${PROJECT_NAME}/
 #############
 ## Testing ##
 #############
+if(CATKIN_ENABLE_TESTING)
+
 # Avoid clash with tr1::tuple: https://code.google.com/p/googletest/source/browse/trunk/README?r=589#257
 add_definitions(-DGTEST_USE_OWN_TR1_TUPLE=0)
 
@@ -56,3 +58,5 @@ catkin_add_gtest(${PROJECT_NAME}-test
   test/hash_id.cpp
 )
 target_link_libraries(${PROJECT_NAME}-test pthread)
+
+endif()

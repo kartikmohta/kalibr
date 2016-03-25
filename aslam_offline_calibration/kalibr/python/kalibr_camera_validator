@@ -122,7 +122,7 @@ class CameraChainValidator(object):
             #convert image to numpy
             try:
                 cv_image = self.bridge.imgmsg_to_cv2(msg, "mono8")
-                np_image = np.array(cv_image)
+                np_image = np.squeeze(np.array(cv_image))
             except CvBridgeError, e:
                 print e
 
