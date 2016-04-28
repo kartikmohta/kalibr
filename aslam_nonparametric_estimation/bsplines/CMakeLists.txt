@@ -5,10 +5,11 @@ find_package(catkin_simple REQUIRED)
 
 catkin_simple()
 
-cs_add_library(${PROJECT_NAME} 
+cs_add_library(${PROJECT_NAME}
   src/BSpline.cpp
   src/BSplinePose.cpp
 )
+target_link_libraries(${PROJECT_NAME} cholmod)
 
 
 cs_install()

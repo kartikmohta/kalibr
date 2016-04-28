@@ -21,6 +21,5 @@
   <build_depend>sm_eigen</build_depend>
   <build_depend>sm_timing</build_depend>
   <build_depend>sparse_block_matrix</build_depend>
-  <build_depend>suitesparse</build_depend>
   <build_depend>opencv2_catkin</build_depend>
 </package>

@@ -41,7 +41,7 @@ cs_add_library(${PROJECT_NAME}
 )
 
 find_package(Boost REQUIRED COMPONENTS system thread)
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${TBB_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${TBB_LIBRARIES} spqr cholmod)
 
 if(CATKIN_ENABLE_TESTING)
 

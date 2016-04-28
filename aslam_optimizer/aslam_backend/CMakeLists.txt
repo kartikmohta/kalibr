@@ -46,7 +46,7 @@ cs_add_library(${PROJECT_NAME}
   src/Optimizer2.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${TBB_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${TBB_LIBRARIES} spqr cholmod)
 
 if(CATKIN_ENABLE_TESTING)
 # Avoid clash with tr1::tuple: https://code.google.com/p/googletest/source/browse/trunk/README?r=589#257
