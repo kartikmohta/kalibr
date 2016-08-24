@@ -15,6 +15,8 @@ cs_add_library(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
 
+if(CATKIN_ENABLE_TESTING)
+
 catkin_add_gtest(${PROJECT_NAME}_test
   test/test_main.cpp
   test/TestBSplineExpressions.cpp
@@ -23,6 +25,8 @@ catkin_add_gtest(${PROJECT_NAME}_test
   )
 
 target_link_libraries(${PROJECT_NAME}_test ${PROJECT_NAME})
+
+endif()
 
 cs_install()
 cs_export()
