@@ -1,6 +1,6 @@
 # Helpful function for adding python export libraries in ROS.
 # Usage:
-# 
+#
 # rosbuild_find_ros_package(numpy_eigen)
 # include(${numpy_eigen_PACKAGE_PATH}/cmake/add_python_export_library.cmake)
 # add_python_export_library(${PROJECT_NAME}_python ${PROJECT_SOURCE_DIR}/src/${PROJECT_NAME}
@@ -27,7 +27,7 @@ FUNCTION(add_python_export_library TARGET_NAME PYTHON_MODULE_DIRECTORY )
 
 
   set(SETUP_PY "${CMAKE_CURRENT_SOURCE_DIR}/setup.py")
-  if(EXISTS ${SETUP_PY}) 
+  if(EXISTS ${SETUP_PY})
   else()
     set(SETUP_PY_TEXT "
 ## ! DO NOT MANUALLY INVOKE THIS setup.py, USE CATKIN INSTEAD
@@ -71,7 +71,7 @@ ${SETUP_PY_TEXT}
   else()
     SET(BOOST_COMPONENTS python)
   endif()
-  find_package(Boost REQUIRED COMPONENTS ${BOOST_COMPONENTS}) 
+  find_package(Boost REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 
   IF(APPLE)
     # The apple framework headers don't include the numpy headers for some reason.
@@ -115,28 +115,22 @@ ${SETUP_PY_TEXT}
   get_filename_component(PYLIB_OUTPUT_NAME ${PYLIB_OUTPUT_FILE} NAME_WE)
   set(PYLIB_SO_NAME ${PYLIB_OUTPUT_NAME}.so)
 
-  if(APPLE)
-    SET(DIST_DIR site-packages)
-  else()
-    SET(DIST_DIR dist-packages)
-  endif()
-
   install(TARGETS ${TARGET_NAME}
-    ARCHIVE DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION}/python2.7/${DIST_DIR}/${TARGET_NAME}
-    LIBRARY DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION}/python2.7/${DIST_DIR}/${TARGET_NAME}
+    ARCHIVE DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION}
+    LIBRARY DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION}
   )
-  
-    # Cause the library to be output in the correct directory.
-  set(PYTHON_LIB_DIR ${CATKIN_DEVEL_PREFIX}/lib/python2.7/${DIST_DIR}/${PYTHON_PACKAGE_NAME})
-  add_custom_command(TARGET ${TARGET_NAME}
-    POST_BUILD
-    COMMAND mkdir -p ${PYTHON_LIB_DIR} && cp -v ${PYLIB_OUTPUT_FILE} ${PYTHON_LIB_DIR}/${PYLIB_SO_NAME}
-    WORKING_DIRECTORY ${CATKIN_DEVEL_PREFIX}
-    COMMENT "Copying library files to python directory" )
 
-  get_directory_property(AMCF ADDITIONAL_MAKE_CLEAN_FILES)
-  list(APPEND AMCF ${PYTHON_LIB_DIR}/${PYLIB_SO_NAME})
-  set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${AMCF}") 
-  
+  # Cause the library to be output in the correct directory.
+  #set(PYTHON_LIB_DIR ${CATKIN_DEVEL_PREFIX}/lib/python2.7/${DIST_DIR}/${PYTHON_PACKAGE_NAME})
+  #add_custom_command(TARGET ${TARGET_NAME}
+  #  POST_BUILD
+  #  COMMAND mkdir -p ${PYTHON_LIB_DIR} && cp -v ${PYLIB_OUTPUT_FILE} ${PYTHON_LIB_DIR}/${PYLIB_SO_NAME}
+  #  WORKING_DIRECTORY ${CATKIN_DEVEL_PREFIX}
+  #  COMMENT "Copying library files to python directory" )
+
+  #get_directory_property(AMCF ADDITIONAL_MAKE_CLEAN_FILES)
+  #list(APPEND AMCF ${PYTHON_LIB_DIR}/${PYLIB_SO_NAME})
+  #set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${AMCF}")
+
 ENDFUNCTION()
 
