@@ -153,7 +153,7 @@ protected:
         this->detail_common_oarchive::save_override(t, 0);
     }
     // explicitly convert to char * to avoid compile ambiguities
-    void save_override(const boost::archive::class_name_type & t){
+    void save_override(const boost::archive::class_name_type & t, int){
         const std::string s(t);
         * this << s;
     }
