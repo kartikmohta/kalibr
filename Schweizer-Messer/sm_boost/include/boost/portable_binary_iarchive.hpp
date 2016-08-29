@@ -28,11 +28,13 @@
 #include <boost/archive/basic_binary_iprimitive.hpp>
 #include <boost/archive/detail/common_iarchive.hpp>
 #include <boost/version.hpp>
+
 #if BOOST_VERSION >= 105600 // see changes in https://github.com/boostorg/serialization/commit/75f09afc895ab09c4eb55d36fcf6f91ef4a0107a
 #include <boost/serialization/shared_ptr.hpp>
 #else
 #include <boost/archive/shared_ptr_helper.hpp>
 #endif
+
 #include <boost/archive/detail/register_archive.hpp>
 #include "portable_binary_archive.hpp"
 
@@ -170,14 +172,22 @@ protected:
     typedef boost::archive::detail::common_iarchive<portable_binary_iarchive>
         detail_common_iarchive;
     template<class T>
+
+// breaking changes in boost >=1.59
+#if BOOST_VERSION >= 105900
     void load_override(T & t){
         this->detail_common_iarchive::load_override(t);
     }
     void load_override(boost::archive::class_name_type & t);
+    void load_override(boost::archive::class_id_optional_type & /* t */){}
+#else
+    void load_override(T & t, BOOST_PFTO int){
+        this->detail_common_iarchive::load_override(t, 0);
+    }
+    void load_override(boost::archive::class_name_type & t, int);
     // binary files don't include the optional information
-    void load_override(
-        boost::archive::class_id_optional_type & /* t */
-    ){}
+    void load_override(boost::archive::class_id_optional_type & /* t */, int){}
+#endif
 
     void init(unsigned int flags);
 public:

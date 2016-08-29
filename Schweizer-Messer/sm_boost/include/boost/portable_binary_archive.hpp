@@ -13,7 +13,13 @@
 
 #include <boost/config.hpp>
 #include <boost/cstdint.hpp>
-//#include <boost/serialization/pfto.hpp>
+
+// breaking changes in boost >=1.59
+#if BOOST_VERSION >= 105900
+#else
+#include <boost/serialization/pfto.hpp>
+#endif
+
 #include <boost/static_assert.hpp>
 
 #include <climits>
@@ -46,7 +52,6 @@ reverse_bytes(char size, char *address){
         *first = x;
     }
 }
-
 
     } // namespace archive
 } // namespace boost

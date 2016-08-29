@@ -20,6 +20,10 @@ cs_add_library(${PROJECT_NAME}
   src/MappedRotationQuaternion.cpp
   src/Vector2RotationQuaternionExpressionAdapter.cpp
 
+  src/MatrixExpression.cpp
+  src/MatrixExpressionNode.cpp
+  src/MatrixTransformation.cpp
+
   src/TransformationExpression.cpp
   src/TransformationExpressionNode.cpp
   src/TransformationBasic.cpp
@@ -63,7 +67,7 @@ catkin_add_gtest(${PROJECT_NAME}_test
   test/HomogeneousExpression.cpp
   test/MatrixAndEuclideanExpression.cpp
   # \todo reenable after I can talk to Hannes.
-  test/FixedPointNumberTest.cpp
+  # test/FixedPointNumberTest.cpp
   test/GenericScalarExpressionTest.cpp
   test/GenericMatrixExpression.cpp
   test/QuaternionExpression.cpp
