@@ -158,8 +158,7 @@ protected:
         * this << s;
     }
     // binary files don't include the optional information
-    void save_override(const boost::archive::class_id_optional_type & /* t */,
-                       int){}
+    void save_override(const boost::archive::class_id_optional_type & /* t */, int){}
 #endif
 
     void init(unsigned int flags);

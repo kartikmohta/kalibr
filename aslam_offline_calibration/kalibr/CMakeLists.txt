@@ -13,7 +13,7 @@ cs_add_library(${PROJECT_NAME}_errorterms
   src/AccelerometerError.cpp
 )
 
-add_python_export_library(${PROJECT_NAME}_errorterms_python python/${PROJECT_NAME}_errorterms/..
+add_python_export_library(${PROJECT_NAME}_errorterms_python python/${PROJECT_NAME}_errorterms
   src/module.cpp
 )
 target_link_libraries(${PROJECT_NAME}_errorterms_python ${PROJECT_NAME}_errorterms)

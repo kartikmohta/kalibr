@@ -109,28 +109,15 @@ ${SETUP_PY_TEXT}
   # Link against boost::python
   target_link_libraries(${TARGET_NAME} ${Boost_LIBRARIES})
 
-  # On OSX and Linux, the python library must end in the extension .so. Build this
-  # filename here.
-  get_property(PYLIB_OUTPUT_FILE TARGET ${TARGET_NAME} PROPERTY LOCATION)
-  get_filename_component(PYLIB_OUTPUT_NAME ${PYLIB_OUTPUT_FILE} NAME_WE)
-  set(PYLIB_SO_NAME ${PYLIB_OUTPUT_NAME}.so)
-
   install(TARGETS ${TARGET_NAME}
-    ARCHIVE DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION}
-    LIBRARY DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION}
+    ARCHIVE DESTINATION ${CATKIN_GLOBAL_PYTHON_DESTINATION}/${PYTHON_PACKAGE_NAME}
+    LIBRARY DESTINATION ${CATKIN_GLOBAL_PYTHON_DESTINATION}/${PYTHON_PACKAGE_NAME}
   )
 
   # Cause the library to be output in the correct directory.
-  #set(PYTHON_LIB_DIR ${CATKIN_DEVEL_PREFIX}/lib/python2.7/${DIST_DIR}/${PYTHON_PACKAGE_NAME})
-  #add_custom_command(TARGET ${TARGET_NAME}
-  #  POST_BUILD
-  #  COMMAND mkdir -p ${PYTHON_LIB_DIR} && cp -v ${PYLIB_OUTPUT_FILE} ${PYTHON_LIB_DIR}/${PYLIB_SO_NAME}
-  #  WORKING_DIRECTORY ${CATKIN_DEVEL_PREFIX}
-  #  COMMENT "Copying library files to python directory" )
-
-  #get_directory_property(AMCF ADDITIONAL_MAKE_CLEAN_FILES)
-  #list(APPEND AMCF ${PYTHON_LIB_DIR}/${PYLIB_SO_NAME})
-  #set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${AMCF}")
+  set_target_properties(${TARGET_NAME} PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CATKIN_DEVEL_PREFIX}/${CATKIN_GLOBAL_PYTHON_DESTINATION}/${PYTHON_PACKAGE_NAME}
+    )
 
 ENDFUNCTION()
 

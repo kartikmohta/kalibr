@@ -189,6 +189,7 @@ protected:
     void load_override(boost::archive::class_id_optional_type & /* t */, int){}
 #endif
 
+
     void init(unsigned int flags);
 public:
     portable_binary_iarchive(std::istream & is, unsigned flags = 0) :

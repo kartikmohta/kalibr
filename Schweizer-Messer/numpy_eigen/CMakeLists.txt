@@ -14,7 +14,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include/numpy_eigen")
 
 catkin_package(
   INCLUDE_DIRS include  ${catkin_INCLUDE_DIRS}
-  LIBRARIES ${PROJECT_NAME}
+  LIBRARIES
   DEPENDS Boost
 )
 add_definitions(-std=c++0x -D__STRICT_ANSI__)
