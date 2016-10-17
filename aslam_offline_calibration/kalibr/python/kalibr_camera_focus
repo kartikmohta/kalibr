@@ -39,11 +39,10 @@ class CameraFocus:
 
         y = 20; x = 20
         text = "fde: {0}   (minimize this for focus)".format(np.sum(fde))
-        print text
         np_image = cv2.cvtColor(np_image, cv2.COLOR_GRAY2BGR)
         cv2.putText(np_image, text, (x,y), cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.5, color=(0, 0, 255), thickness=2)
         cv2.imshow(self.windowNameOrig, np_image)
-        #cv2.waitKey(10)
+        cv2.waitKey(10)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Validate the intrinsics of a camera.')
