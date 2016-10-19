@@ -62,4 +62,12 @@ target_link_libraries(${PROJECT_NAME}_test ${PROJECT_NAME})
 endif()
 
 cs_install()
+
+## Mark tpp files for installation
+install(DIRECTORY include/
+  DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.tpp"
+  PATTERN ".svn" EXCLUDE
+)
+
 cs_export()

@@ -37,6 +37,17 @@ add_python_export_library(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
                       ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
+##################
+## Installation ##
+##################
+
+## Mark cpp header files for installation
+install(DIRECTORY include/
+  DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+  PATTERN ".svn" EXCLUDE
+)
+
 #############
 ## Testing ##
 #############

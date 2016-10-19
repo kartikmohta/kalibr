@@ -16,6 +16,11 @@ set(catkin_simple_CMAKE_DIR "@(PKG_CMAKE_DIR)")
 @[end if]@
 
 macro(catkin_simple)
+  # Arguments
+  # ALL_DEPS_REQUIRED -- Add the "REQUIRED" flag when calling
+  #                      FIND_PACKAGE() for each dependency
+  cmake_parse_arguments(cs_args "ALL_DEPS_REQUIRED" "" "" ${ARGN})
+
   if(TARGET ${PROJECT_NAME}_package)
     message(WARNING "Could not create target '${${PROJECT_NAME}_package}' for project ${PROJECT_NAME}, as it already exists.")
   endif()
@@ -32,7 +37,14 @@ macro(catkin_simple)
   set(${PROJECT_NAME}_CATKIN_BUILD_DEPENDS)
   set(${PROJECT_NAME}_CATKIN_BUILD_DEPENDS_EXPORTED_TARGETS)
   foreach(dep ${${PROJECT_NAME}_BUILD_DEPENDS})
-    find_package(${dep} QUIET)
+    # If this flag is defined, add the "REQUIRED" flag
+    # to all FIND_PACKAGE calls
+    if(cs_args_ALL_DEPS_REQUIRED)
+      find_package(${dep} REQUIRED)
+    else()
+      find_package(${dep} QUIET)
+    endif()
+
     if(${dep}_FOUND_CATKIN_PROJECT)
       list(APPEND ${PROJECT_NAME}_CATKIN_BUILD_DEPENDS ${dep})
       list(APPEND ${PROJECT_NAME}_CATKIN_BUILD_DEPENDS_EXPORTED_TARGETS ${${dep}_EXPORTED_TARGETS})
@@ -97,6 +109,20 @@ macro(catkin_simple)
       list(INSERT ${PROJECT_NAME}_CATKIN_BUILD_DEPENDS_EXPORTED_TARGETS 0 ${${PROJECT_NAME}_EXPORTED_TARGETS})
     endif()
   endif()
+  
+  # generate dynamic reconfigure files
+  if(dynamic_reconfigure_FOUND_CATKIN_PROJECT)
+    set(${PROJECT_NAME}_LOCAL_CFG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cfg)
+    if(IS_DIRECTORY ${${PROJECT_NAME}_LOCAL_CFG_DIR})
+      # create a list containing all the cfg files
+      file(GLOB ${PROJECT_NAME}_LOCAL_CFG_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${${PROJECT_NAME}_LOCAL_CFG_DIR}/*.cfg")
+      if(${PROJECT_NAME}_LOCAL_CFG_FILES)
+        generate_dynamic_reconfigure_options(${${PROJECT_NAME}_LOCAL_CFG_FILES})
+        # add build dep on gencfg
+        list(APPEND ${PROJECT_NAME}_CATKIN_BUILD_DEPENDS_EXPORTED_TARGETS ${PROJECT_NAME}_gencfg)
+      endif()
+    endif()
+  endif()
 endmacro()
 
 macro(cs_add_targets_to_package)
@@ -143,19 +169,34 @@ endmacro()
 
 macro(cs_install)
   # Install targets (exec's and lib's)
+  foreach(_target ${${PROJECT_NAME}_TARGETS})
+    get_target_property(${_target}_type ${_target} TYPE)
+    message(STATUS "Marking ${${_target}_type} \"${_target}\" of package \"${PROJECT_NAME}\" for installation")
+  endforeach()
   install(TARGETS ${${PROJECT_NAME}_TARGETS} ${ARGN}
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   )
-  if(${${PROJECT_NAME}_LOCAL_INCLUDE_DIR})
+  if(EXISTS ${${PROJECT_NAME}_LOCAL_INCLUDE_DIR})
     # Install include directory
+    message(STATUS "Marking HEADER FILES in \"include\" folder of package \"${PROJECT_NAME}\" for installation")
     install(DIRECTORY ${${PROJECT_NAME}_LOCAL_INCLUDE_DIR}/
-      DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+      DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
       FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
       PATTERN ".svn" EXCLUDE
     )
   endif()
+  # Install shared content located in commonly used folders
+  set(_shared_content_folders launch rviz urdf meshes maps worlds Media param)
+  foreach(_folder ${_shared_content_folders})
+    if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${_folder})
+      message(STATUS "Marking SHARED CONTENT FOLDER \"${_folder}\" of package \"${PROJECT_NAME}\" for installation")
+      install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${_folder}/
+        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${_folder}
+      )
+    endif()
+  endforeach()
 endmacro()
 
 macro(cs_install_scripts)

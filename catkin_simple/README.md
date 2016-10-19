@@ -53,13 +53,17 @@ Then you invoke `catkin_simple`:
 catkin_simple()
 ```
 
-This macro call gathers your `build_depend`'s from the `package.xml` of your package. Then does a `find_package(...)` on each of them, each with the `QUIET` option and without the `REQUIRES` option. That way if any of the build_depend's are not `catkin` packages then they are simply ignored. This means that if you depend on a `caktin` package which is not on your system, `catkin_simple` will not warn you about this, because there is no way to know if it is a missing `catkin` package or a system dependency.
+This macro call gathers your `build_depend`'s from the `package.xml` of your package, then does a `find_package(...)` on each of them. 
+
+By default, `find_package(...)` is called with the `QUIET` option and without the `REQUIRED` option. That way, if any of the build_depend's are not `catkin` packages then they are simply ignored. This means that if you depend on a `caktin` package which is not on your system, `catkin_simple` will not warn you about this, because there is no way to know if it is a missing `catkin` package or a system dependency. If this is not the desired behaviour, calling `catkin_simple(ALL_DEPS_REQUIRED)` will call `find_package(...)` on each dependency *with* the `REQUIRED` option.
 
 Packages which are successfully found and identified to be `catkin` packages are added to a list of "catkin build dependencies" for your package. This list of build dependencies is passed to `find_package(catkin REQUIRED COMPONENTS ...)`. This command is required.
 
 Next, this macro adds the local `include` folder and any `catkin` include directories to the include path with CMake's `include_directories(...)` macro, but the local `include` folder is only added if it exists.
 
 Finally, this macro will discover and build any ROS messages, services, and actions which reside in the `msg`, `srv`, action `action` folders, respectively. The automatic discovery and building of messages/services is only done if your package `build_depend`'s on `message_generation`, and message generation will complain if your package does not run_depend on `message_runtime`.
+
+This macro discovers and builds [dynamic_reconfigure](http://wiki.ros.org/dynamic_reconfigure) config files from the `cfg` folder. The automatic discovery only works if your package `build_depend`'s on `dynamic_reconfigure`, and dynamic reconfigure will complain if your package does not run_depend on `dynamic_reconfigure`.
 
 ### cs_add_library()
 
